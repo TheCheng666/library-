@@ -10,7 +10,6 @@ import com.service.UserService;
 import com.utils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,13 +29,12 @@ public class UserController {
 
     /**http://localhost:8080/User/brrowBook
      * book对象: book_id 和 bookNum
-     * BrrowInfo对象： bookid applytime（申请借书时间）
+     * BrrowInfo对象： bookid lendtime applytime（申请借书时间）
      * 借书
      * @param book
      * @param brrowInfo
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/brrowBook")
     @ResponseBody
     public Msg brrowBook(Book book, BrrowInfo brrowInfo, HttpServletRequest request){
@@ -68,7 +66,6 @@ public class UserController {
      * @param session
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/getBrrowInfo")
     @ResponseBody
     public Msg getBrrowInfo(HttpSession session){
@@ -90,7 +87,6 @@ public class UserController {
      * @param brrowInfo
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/returnBook")
     @ResponseBody
     public Msg returnBook(BrrowInfo brrowInfo){
@@ -114,7 +110,6 @@ public class UserController {
      * @param brrowInfo
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/submitBrrow")
     @ResponseBody
     public Msg submitBrrow(Book book, BrrowInfo brrowInfo){

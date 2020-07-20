@@ -28,12 +28,15 @@ public class LoginExceptionResolver implements HandlerExceptionResolver {
         if (ex instanceof LoginException){
             e=(LoginException)ex;
             ModelAndView modelAndView=new ModelAndView();
-            modelAndView.setViewName("redirect:/index.jsp");
+            modelAndView.setViewName("redirect:/exception.jsp");
             request.getSession().setAttribute("LoginException",e.getMsg());
             return modelAndView;
         }else {
             e=new LoginException("非登录错误！");
-            return null;
+            ModelAndView modelAndView=new ModelAndView();
+            modelAndView.setViewName("redirect:/error.jsp");
+            request.getSession().setAttribute("OtherException",e.getMsg());
+            return modelAndView;
         }
     }
 }

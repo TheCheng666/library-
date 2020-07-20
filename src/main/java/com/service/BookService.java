@@ -15,4 +15,6 @@ public interface BookService {
     List<BookType> getBookType();
 
     List<Book> getBookByType(Integer id);
+
+    Book getBookById(Integer id);
 }

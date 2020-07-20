@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<BrrowInfo> getBrrowInfo(Integer id) {
         BrrowInfoExample example=new BrrowInfoExample();
-        example.setOrderByClause("status ASC");
+        example.setOrderByClause("status DESC");
         BrrowInfoExample.Criteria criteria=example.createCriteria();
         criteria.andUseridEqualTo(id);
         List<BrrowInfo> brrowInfos=brrowInfoMapper.selectByExampleWithAccountAndBook(example);

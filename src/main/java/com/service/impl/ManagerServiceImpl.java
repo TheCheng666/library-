@@ -72,11 +72,6 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
 
-    @Override
-    public Book getBookById(Integer id) {
-        Book book=bookMapper.selectByPrimaryKeyWithAuthorAndBookType(id);
-        return book;
-    }
 
     @Override
     public List<BrrowInfo> getBrrowInfo() {

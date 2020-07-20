@@ -8,7 +8,6 @@ import com.service.BookService;
 import com.utils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +25,6 @@ public class BookController {
      * @param pn
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/getBooks")
     @ResponseBody
     public Msg getBooks(@RequestParam(value = "pn",defaultValue = "1")Integer pn){
@@ -46,7 +44,6 @@ public class BookController {
      * @param bookName
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/getBookByName")
     @ResponseBody
     public Msg getBookByName(String bookName){
@@ -68,7 +65,6 @@ public class BookController {
      * @param authorName
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/getBookByAuthor")
     @ResponseBody
     public Msg getBookByAuthor(String authorName){
@@ -90,21 +86,31 @@ public class BookController {
      * 在增加book之前先获取booktype，以下拉列表显示
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/getBookType")
     @ResponseBody
     public Msg getBookType(){
         List<BookType> bookType =bookService.getBookType();
         return Msg.success().add("booktype",bookType);
     }
-
+    /**
+     * http://localhost:8080/Book/getBookById
+     * 通过book_id查询
+     * 在修改时回显调用
+     * @param id
+     * @return
+     */
+    @RequestMapping("/getBookById")
+    @ResponseBody
+    public Msg getBookById(Integer id){
+        Book book=bookService.getBookById(id);
+        return Msg.success().add("book",book);
+    }
     /**
      * http://localhost:8080/Book/getBookByType
      * 通过类型查询 传入id
      * @param id
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/getBookByType")
     @ResponseBody
     public Msg getBookByType(Integer id){

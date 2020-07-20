@@ -19,7 +19,6 @@ public interface ManagerService {
     boolean updateBook(Book book,Author author);
 
 
-    Book getBookById(Integer id);
 
     List<BrrowInfo> getBrrowInfo();
 

@@ -54,4 +54,10 @@ public class BookServiceImpl implements BookService {
         List<Book> books=bookMapper.selectByExampleWithAuthorAndBookType(example);
         return books;
     }
+
+    @Override
+    public Book getBookById(Integer id) {
+        Book book=bookMapper.selectByPrimaryKeyWithAuthorAndBookType(id);
+        return book;
+    }
 }

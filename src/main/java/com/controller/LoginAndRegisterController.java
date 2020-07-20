@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -106,7 +105,7 @@ public class LoginAndRegisterController {
             if (count){
                 return Msg.success();
             }else {
-                return Msg.fail().add("account",account);
+                return Msg.fail();
             }
         }
     }
@@ -139,7 +138,6 @@ public class LoginAndRegisterController {
      * @param request
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/logout")
     @ResponseBody
     public Msg logout(HttpServletRequest request){

@@ -8,7 +8,6 @@ import com.service.ManagerService;
 import com.utils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin
 @Controller
 @RequestMapping("/Manager")
 public class ManagerController {
@@ -38,7 +36,6 @@ public class ManagerController {
      * @param account
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/getBrrowInfoByAccount")
     @ResponseBody
     public Msg getBrrowInfoByAccount(String account){
@@ -60,39 +57,22 @@ public class ManagerController {
      * 管理员获取订单信息
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/getBrrowInfo")
     @ResponseBody
     public Msg getBrrowInfo(){
         List<BrrowInfo> brrowInfos=managerService.getBrrowInfo();
         return Msg.success().add("brrowinfos",brrowInfos);
     }
-    /**
-     * http://localhost:8080/Manager/getBookById
-     * 通过book_id查询
-     * 在修改时回显调用
-     * @param id
-     * @return
-     */
-    @CrossOrigin
-    @RequestMapping("/getBookById")
-    @ResponseBody
-    public Msg getBookById(Integer id){
-        Book book=managerService.getBookById(id);
-        return Msg.success().add("book",book);
-    }
-
 
     @RequestMapping("/upload")
     @ResponseBody
-    @CrossOrigin
     public Msg upload(MultipartFile file) throws IOException {
         String path=null;
         if (file!=null){
             String oldName=file.getOriginalFilename();
             if (oldName!=null&&oldName.length()>0){
                 String newName= UUID.randomUUID()+oldName.substring(oldName.lastIndexOf("."));
-                file.transferTo(new File("D:\\2020极客营实训\\项目\\library\\picture\\"+newName));
+                file.transferTo(new File("E:\\SSM\\library\\picture\\"+newName));
                 path="/pic/"+newName;
                 return Msg.success().add("path",path);
             }else {
@@ -113,7 +93,6 @@ public class ManagerController {
      */
     @RequestMapping("/addBookAndAuthor")
     @ResponseBody
-    @CrossOrigin
     public Msg addBook(Book book, Author author){
         boolean result=managerService.addBookAndAuthor(book,author);
         if (result){
@@ -130,7 +109,6 @@ public class ManagerController {
      */
     @RequestMapping(value = "/deleteBook/{ids}")
     @ResponseBody
-    @CrossOrigin
     public Msg deleteBook(@PathVariable("ids") String ids){
         boolean result;
         if (ids.contains("-")){
@@ -158,7 +136,6 @@ public class ManagerController {
      * @param book
      * @return
      */
-    @CrossOrigin
     @RequestMapping("/updateBookAndAuthor")
     @ResponseBody
     public Msg updateBookAndAuthor(Book book,Author author) {
