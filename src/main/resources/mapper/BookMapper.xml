@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.BookMapper">
+  <resultMap id="BaseResultMap" type="com.entity.Book">
+    <id column="book_id" jdbcType="INTEGER" property="bookId" />
+    <result column="book_name" jdbcType="VARCHAR" property="bookName" />
+    <result column="book_number" jdbcType="INTEGER" property="bookNumber" />
+    <result column="book_photo" jdbcType="VARCHAR" property="bookPhoto" />
+    <result column="book_typeid" jdbcType="INTEGER" property="bookTypeid" />
+    <result column="authorid" jdbcType="INTEGER" property="authorid" />
+    <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+    <result column="publishtime" jdbcType="DATE" property="publishtime" />
+  </resultMap>
+  <resultMap id="ResultMapWithBookTypeAndAuthor" type="com.entity.Book">
+    <id column="book_id" jdbcType="INTEGER" property="bookId" />
+    <result column="book_name" jdbcType="VARCHAR" property="bookName" />
+    <result column="book_number" jdbcType="INTEGER" property="bookNumber" />
+    <result column="book_typeid" jdbcType="INTEGER" property="bookTypeid" />
+    <result column="authorid" jdbcType="INTEGER" property="authorid" />
+    <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+    <result column="publishtime" jdbcType="DATE" property="publishtime" />
+    <result column="book_photo" jdbcType="VARCHAR" property="bookPhoto" />
+    <association property="author" javaType="com.entity.Author">
+      <id column="author_id" property="authorId"></id>
+      <result column="author_name" property="authorName"></result>
+      <result column="author_photo" property="authorPhoto" jdbcType="VARCHAR"></result>
+      <result column="author_info" property="authorInfo"></result>
+    </association>
+    <association property="bookType" javaType="com.entity.BookType">
+      <id column="type_id" property="typeId"></id>
+      <result column="type_name" property="typeName"></result>
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    book_id, book_name, book_number, book_photo, book_typeid, authorid, publisher, publishtime
+  </sql>
+  <sql id="BookTypeAndAuthor_List">
+    b.book_id, b.book_name, b.book_number, b.book_typeid, b.authorid, b.publisher, b.publishtime,b.book_photo,bt.type_id,bt.type_name,a.author_id,a.author_name,a.author_photo,a.author_info
+  </sql>
+  <select id="selectByExampleWithAuthorAndBookTypeByAuthor" parameterType="string" resultMap="ResultMapWithBookTypeAndAuthor">
+    select
+    <include refid="BookTypeAndAuthor_List" />
+    from book b left join booktype bt on b.book_typeid=bt.type_id left join author a on b.authorid=a.author_id
+    where a.author_name=#{authorName}
+  </select>
+  <select id="selectByExampleWithAuthorAndBookType" parameterType="com.entity.BookExample" resultMap="ResultMapWithBookTypeAndAuthor">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="BookTypeAndAuthor_List" />
+    from book b left join booktype bt on b.book_typeid=bt.type_id left join author a on b.authorid=a.author_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKeyWithAuthorAndBookType" parameterType="java.lang.Integer" resultMap="ResultMapWithBookTypeAndAuthor">
+    select
+    <include refid="BookTypeAndAuthor_List" />
+    from book b left join booktype bt on b.book_typeid=bt.type_id left join author a on b.authorid=a.author_id
+    where book_id = #{bookId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByExample" parameterType="com.entity.BookExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from book
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from book
+    where book_id = #{bookId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from book
+    where book_id = #{bookId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.entity.BookExample">
+    delete from book
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.entity.Book">
+    insert into book (book_id, book_name, book_number, 
+      book_photo, book_typeid, authorid, 
+      publisher, publishtime)
+    values (#{bookId,jdbcType=INTEGER}, #{bookName,jdbcType=VARCHAR}, #{bookNumber,jdbcType=INTEGER}, 
+      #{bookPhoto,jdbcType=VARCHAR}, #{bookTypeid,jdbcType=INTEGER}, #{authorid,jdbcType=INTEGER}, 
+      #{publisher,jdbcType=VARCHAR}, #{publishtime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.entity.Book">
+    insert into book
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bookId != null">
+        book_id,
+      </if>
+      <if test="bookName != null">
+        book_name,
+      </if>
+      <if test="bookNumber != null">
+        book_number,
+      </if>
+      <if test="bookPhoto != null">
+        book_photo,
+      </if>
+      <if test="bookTypeid != null">
+        book_typeid,
+      </if>
+      <if test="authorid != null">
+        authorid,
+      </if>
+      <if test="publisher != null">
+        publisher,
+      </if>
+      <if test="publishtime != null">
+        publishtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bookId != null">
+        #{bookId,jdbcType=INTEGER},
+      </if>
+      <if test="bookName != null">
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookNumber != null">
+        #{bookNumber,jdbcType=INTEGER},
+      </if>
+      <if test="bookPhoto != null">
+        #{bookPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="bookTypeid != null">
+        #{bookTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="authorid != null">
+        #{authorid,jdbcType=INTEGER},
+      </if>
+      <if test="publisher != null">
+        #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null">
+        #{publishtime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.entity.BookExample" resultType="java.lang.Long">
+    select count(*) from book
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update book
+    <set>
+      <if test="record.bookId != null">
+        book_id = #{record.bookId,jdbcType=INTEGER},
+      </if>
+      <if test="record.bookName != null">
+        book_name = #{record.bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookNumber != null">
+        book_number = #{record.bookNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.bookPhoto != null">
+        book_photo = #{record.bookPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bookTypeid != null">
+        book_typeid = #{record.bookTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.authorid != null">
+        authorid = #{record.authorid,jdbcType=INTEGER},
+      </if>
+      <if test="record.publisher != null">
+        publisher = #{record.publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publishtime != null">
+        publishtime = #{record.publishtime,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update book
+    set book_id = #{record.bookId,jdbcType=INTEGER},
+      book_name = #{record.bookName,jdbcType=VARCHAR},
+      book_number = #{record.bookNumber,jdbcType=INTEGER},
+      book_photo = #{record.bookPhoto,jdbcType=VARCHAR},
+      book_typeid = #{record.bookTypeid,jdbcType=INTEGER},
+      authorid = #{record.authorid,jdbcType=INTEGER},
+      publisher = #{record.publisher,jdbcType=VARCHAR},
+      publishtime = #{record.publishtime,jdbcType=DATE}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.entity.Book">
+    update book
+    <set>
+      <if test="bookName != null">
+        book_name = #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookNumber != null">
+        book_number = #{bookNumber,jdbcType=INTEGER},
+      </if>
+      <if test="bookPhoto != null">
+        book_photo = #{bookPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="bookTypeid != null">
+        book_typeid = #{bookTypeid,jdbcType=INTEGER},
+      </if>
+      <if test="authorid != null">
+        authorid = #{authorid,jdbcType=INTEGER},
+      </if>
+      <if test="publisher != null">
+        publisher = #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null">
+        publishtime = #{publishtime,jdbcType=DATE},
+      </if>
+    </set>
+    where book_id = #{bookId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Book">
+    update book
+    set book_name = #{bookName,jdbcType=VARCHAR},
+      book_number = #{bookNumber,jdbcType=INTEGER},
+      book_photo = #{bookPhoto,jdbcType=VARCHAR},
+      book_typeid = #{bookTypeid,jdbcType=INTEGER},
+      authorid = #{authorid,jdbcType=INTEGER},
+      publisher = #{publisher,jdbcType=VARCHAR},
+      publishtime = #{publishtime,jdbcType=DATE}
+    where book_id = #{bookId,jdbcType=INTEGER}
+  </update>
+</mapper>
